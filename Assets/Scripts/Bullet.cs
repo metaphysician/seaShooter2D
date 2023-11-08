@@ -19,7 +19,9 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            if(transform.parent != null)
+                Destroy(transform.parent.gameObject);
+            Destroy(this.gameObject);
         } 
         
     }
