@@ -17,9 +17,13 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private bool _hasShield = false;
     [SerializeField] private UI_Manager _UImanager;
     [SerializeField] private int _playerLives;
+    [SerializeField] private GameObject _playerDamage1;
+    [SerializeField] private GameObject _playerDamage2;
+    [SerializeField] private Sprite _playerSingleGun;
+    [SerializeField] private bool _oneLifeLeft=false;
     [SerializeField] private int _playerScore = 0;
     [SerializeField] private SpawnMgr _spawner;
-
+    
 
     // Start is called before the first frame update
     
@@ -82,8 +86,16 @@ public class PlayerCtrl : MonoBehaviour
           }
           else if(_shotsFired == 1)
           {
-            Xoffset = transform.position.x + -0.9f;
-            Yoffset = transform.position.y + 1.33f;
+            if(!_oneLifeLeft)
+            {
+              Xoffset = transform.position.x + -0.9f;
+              Yoffset = transform.position.y + 1.33f;
+            }
+            else
+            {
+              Xoffset = transform.position.x + .72f;
+              Yoffset = transform.position.y + 1f;
+            }
           }
         }
         else
@@ -134,6 +146,16 @@ public class PlayerCtrl : MonoBehaviour
       {
         _playerLives --;
         _UImanager.UpdatePlayerLives(_playerLives);
+        
+        if (_playerLives == 2)
+          _playerDamage1.SetActive(true);
+        else if (_playerLives == 1)
+          _playerDamage2.SetActive(true);
+        else if (_playerLives == 0)
+        {
+          GetComponent<SpriteRenderer>().sprite = _playerSingleGun;
+          _oneLifeLeft = true;
+        }
       }
       else
       {
