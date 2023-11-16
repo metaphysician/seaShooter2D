@@ -8,7 +8,7 @@ using TMPro;
 public class UI_Manager : MonoBehaviour
 {
    [SerializeField] TMP_Text _scoreUI;
-   [SerializeField] SpriteRenderer[] playerLifeIcons;
+   [SerializeField] Image[] playerLifeIcons;
    [SerializeField] TMP_Text _gameOver;
    
 

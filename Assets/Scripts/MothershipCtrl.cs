@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class MothershipCtrl : MonoBehaviour
 {
+    private GameManager manager;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -15,4 +17,6 @@ public class MothershipCtrl : MonoBehaviour
     {
         
     }
+
+
 }

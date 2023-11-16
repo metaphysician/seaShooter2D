@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
     {
         if (transform.position.y < 6.6f)
         {
-          transform.Translate(Vector2.up * Time.deltaTime * 8.0f);
+          transform.Translate(Vector2.up * Time.deltaTime * 12.0f);
         }
         else
         {

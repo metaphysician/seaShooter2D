@@ -10,6 +10,9 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private GameObject _bulletObject;
     [SerializeField] private GameObject _tripleShotObject;
     [SerializeField] private GameObject _shieldObject;
+    [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private Animator _L_armAnimator;
+    [SerializeField] private Animator _R_armAnimator;
     [SerializeField] private bool _canFireBullet = true;
     [SerializeField] private int _shotsFired = 0;
     [SerializeField] private bool _has3shotPowerup = false;
@@ -56,6 +59,15 @@ public class PlayerCtrl : MonoBehaviour
     {
       float Xmove = Input.GetAxis("Horizontal");
       float Ymove = Input.GetAxis("Vertical");
+      if(Xmove + Ymove != 0)
+      {
+        _playerAnimator.speed = 1.0f;
+      }
+      else
+      {
+        _playerAnimator.speed = 0.0f;
+      }
+
       Vector3 movePos = new Vector3(Xmove,Ymove,0);
       transform.Translate(Time.deltaTime * _speed * movePos);
       
@@ -81,8 +93,9 @@ public class PlayerCtrl : MonoBehaviour
           _shotsFired %= 2;
           if(_shotsFired == 0)
           {
-            Xoffset = transform.position.x + .72f;
+            Xoffset = transform.position.x + 1.2f;
             Yoffset = transform.position.y + 1f;
+            _R_armAnimator.Play("FireRight",-1,0.0f);
           }
           else if(_shotsFired == 1)
           {
@@ -90,24 +103,29 @@ public class PlayerCtrl : MonoBehaviour
             {
               Xoffset = transform.position.x + -0.9f;
               Yoffset = transform.position.y + 1.33f;
+              _L_armAnimator.Play("FireLeft",-1,0.0f);
             }
             else
             {
-              Xoffset = transform.position.x + .72f;
+              Xoffset = transform.position.x + 1.2f;
               Yoffset = transform.position.y + 1f;
+              _R_armAnimator.Play("FireRight",-1,0.0f);
             }
           }
         }
         else
         {
-          Xoffset = transform.position.x + .72f;
+          Xoffset = transform.position.x + 1.2f;
           Yoffset = transform.position.y + 1f;
           
           Vector3 offset2 = new Vector3(transform.position.x + -0.9f,transform.position.y + 1.33f,transform.position.z);
           GameObject.Instantiate(projectile,offset2,Quaternion.identity);
+          _L_armAnimator.Play("FireLeft",-1,0.0f);
+          _R_armAnimator.Play("FireRight",-1,0.0f);
         }
           Vector3 offset = new Vector3(Xoffset,Yoffset,transform.position.z);
           GameObject.Instantiate(projectile,offset,Quaternion.identity);
+          
 
         _canFireBullet = false;
         StartCoroutine(BulletCooldown());

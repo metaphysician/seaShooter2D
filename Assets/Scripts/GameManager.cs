@@ -14,7 +14,37 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentGameState = 0;
+        currentGameState = GameState.Intro;
+        
+    }
+
+    public void UpdateStates()
+    {
+        switch(currentGameState)
+        {
+            case GameState.Menu:
+            //load menu scene?
+            break;
+            case GameState.Intro:
+            //play intro cutscene
+            break;
+            case GameState.Gameplay:
+            //show UI
+            //start spawning enemies
+            break;
+            case GameState.Interlude:
+            //stop spawning
+            //bring mothership down
+            break;
+            case GameState.Victory:
+            //winning UI
+            //game is over
+            break;
+            case GameState.Defeat:
+            //losing UI
+            //game is over
+            break;
+        }
     }
 
     // Update is called once per frame
