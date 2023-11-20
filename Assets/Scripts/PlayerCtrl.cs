@@ -26,6 +26,7 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private bool _oneLifeLeft=false;
     [SerializeField] private int _playerScore = 0;
     [SerializeField] private SpawnMgr _spawner;
+    [SerializeField] private AudioManager _audioMgr;
     
 
     // Start is called before the first frame update
@@ -37,6 +38,7 @@ public class PlayerCtrl : MonoBehaviour
 
       _spawner = GameObject.Find("_SpawnManager").GetComponent<SpawnMgr>();
       _UImanager = GameObject.Find("UIManager").GetComponent<UI_Manager>();
+      _audioMgr = GameObject.Find("AudioMgr").GetComponent<AudioManager>();
 
       if(_spawner == null)
         Debug.Log("No Spawn Mgr Found!");
@@ -96,6 +98,7 @@ public class PlayerCtrl : MonoBehaviour
             Xoffset = transform.position.x + 1.2f;
             Yoffset = transform.position.y + 1f;
             _R_armAnimator.Play("FireRight",-1,0.0f);
+            _audioMgr.PlayGunSound();
           }
           else if(_shotsFired == 1)
           {
@@ -104,12 +107,14 @@ public class PlayerCtrl : MonoBehaviour
               Xoffset = transform.position.x + -0.9f;
               Yoffset = transform.position.y + 1.33f;
               _L_armAnimator.Play("FireLeft",-1,0.0f);
+              _audioMgr.PlayGunSound();
             }
             else
             {
               Xoffset = transform.position.x + 1.2f;
               Yoffset = transform.position.y + 1f;
               _R_armAnimator.Play("FireRight",-1,0.0f);
+              _audioMgr.PlayGunSound();
             }
           }
         }
@@ -122,6 +127,7 @@ public class PlayerCtrl : MonoBehaviour
           GameObject.Instantiate(projectile,offset2,Quaternion.identity);
           _L_armAnimator.Play("FireLeft",-1,0.0f);
           _R_armAnimator.Play("FireRight",-1,0.0f);
+          _audioMgr.PlayDoubleGunShots();
         }
           Vector3 offset = new Vector3(Xoffset,Yoffset,transform.position.z);
           GameObject.Instantiate(projectile,offset,Quaternion.identity);
@@ -162,8 +168,10 @@ public class PlayerCtrl : MonoBehaviour
 
       if(_playerLives > 0)
       {
+
         _playerLives --;
         _UImanager.UpdatePlayerLives(_playerLives);
+        _audioMgr.PlayerSFX("damage");
         
         if (_playerLives == 2)
           _playerDamage1.SetActive(true);

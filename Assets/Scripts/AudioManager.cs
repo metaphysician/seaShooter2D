@@ -33,6 +33,11 @@ public class AudioManager : MonoBehaviour
         _gunSource.PlayOneShot(_fireGun);
     }
 
+    public void PlayDoubleGunShots()
+    {
+        StartCoroutine(TwoGunFireSound());
+    }
+
     public void EnemyExplodeSound()
     {
         _enemyExplosion.PlayOneShot(_enemyExplodes);
@@ -66,4 +71,13 @@ public class AudioManager : MonoBehaviour
     }
 
 
+    IEnumerator TwoGunFireSound()
+    {
+        _gunSource.pitch = 0.8f;
+        _gunSource.PlayOneShot(_fireGun);
+        yield return new WaitForSeconds(.03f);
+        _gunSource.PlayOneShot(_fireGun);
+        _gunSource.pitch = 1.0f;
+
+    }
 }
