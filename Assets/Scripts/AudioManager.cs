@@ -38,8 +38,9 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(TwoGunFireSound());
     }
 
-    public void EnemyExplodeSound()
+    public void PlayEnemyExplodeSound()
     {
+        _enemyExplosion.pitch = Random.Range(0.8f, 1.6f);
         _enemyExplosion.PlayOneShot(_enemyExplodes);
     }
 

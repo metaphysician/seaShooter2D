@@ -5,12 +5,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private PlayerCtrl _player;
+    private AudioManager _audio;
     [SerializeField] private GameObject _enemyExplodes;
     // Start is called before the first frame update
     void Start()
     {
         if(GameObject.Find("Player2D") != null)
-            _player = GameObject.Find("Player2D").GetComponent<PlayerCtrl>();   
+            _player = GameObject.Find("Player2D").GetComponent<PlayerCtrl>();  
+        if(GameObject.Find("AudioMgr") != null)
+            _audio = GameObject.Find("AudioMgr").GetComponent<AudioManager>();    
     }
 
     // Update is called once per frame
@@ -58,5 +61,6 @@ public class Enemy : MonoBehaviour
     void ExplodeEnemy()
     {
         GameObject explosion = GameObject.Instantiate(_enemyExplodes,transform.position,Quaternion.identity);
+        _audio.PlayEnemyExplodeSound();
     }
 }
