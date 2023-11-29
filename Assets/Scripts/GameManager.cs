@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject _uiPauseMenu;
     [SerializeField] private bool _isGameOver = false;
     [SerializeField] private Animator _mothershipAnim;
     public enum GameState{Menu,Intro,Gameplay,Interlude,Victory,Defeat}
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         currentGameState = GameState.Intro;
         
     }
@@ -50,6 +52,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            _uiPauseMenu.SetActive(true);
+            Time.timeScale = 0.0f;
+        }
         if(_isGameOver)
         {
             if(Input.GetKeyDown(KeyCode.R))
@@ -76,6 +83,22 @@ public class GameManager : MonoBehaviour
     public void GameOver_Restart()
     {
         _isGameOver = true;
+    }
+
+    public void Continue()
+    {
+        _uiPauseMenu.SetActive(false);
+        Time.timeScale = 1.0f;
+    }
+
+    public void Menu()
+    {
+        SceneManager.LoadScene("menu");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
 }
