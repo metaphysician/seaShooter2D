@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - enemy
-  - torpedo
   - bullet
+  - spore
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,7 @@ public class MusicManager : MonoBehaviour
         for(int track = 0; track < trackSources.Length; track++)
         {
             int diceroll = Random.Range(0,5);
-            Debug.Log("For "+trackSources[track].gameObject.name+":"+diceroll);
+            //Debug.Log("For "+trackSources[track].gameObject.name+":"+diceroll);
             if(diceroll > 2)
                 trackSources[track].mute = false;
             else 

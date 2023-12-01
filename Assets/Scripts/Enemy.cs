@@ -7,13 +7,21 @@ public class Enemy : MonoBehaviour
     private PlayerCtrl _player;
     private AudioManager _audio;
     [SerializeField] private GameObject _enemyExplodes;
+    [SerializeField] private GameObject _spore;
     // Start is called before the first frame update
     void Start()
     {
         if(GameObject.Find("Player2D") != null)
             _player = GameObject.Find("Player2D").GetComponent<PlayerCtrl>();  
         if(GameObject.Find("AudioMgr") != null)
-            _audio = GameObject.Find("AudioMgr").GetComponent<AudioManager>();    
+            _audio = GameObject.Find("AudioMgr").GetComponent<AudioManager>();
+
+        int dice = Random.Range(0,3);
+        if (dice == 1)
+        {
+            Debug.Log("SPORED!!!");
+            StartCoroutine(SporeShootWait());
+        }    
     }
 
     // Update is called once per frame
@@ -21,7 +29,7 @@ public class Enemy : MonoBehaviour
     {
         if (transform.position.y > -6.6f)
         {
-            transform.Translate(Vector3.down * Time.deltaTime * 4.0f);
+            transform.Translate(Vector3.down * Time.deltaTime * 2.0f);
         }
         else
         {
@@ -62,5 +70,15 @@ public class Enemy : MonoBehaviour
     {
         GameObject explosion = GameObject.Instantiate(_enemyExplodes,transform.position,Quaternion.identity);
         _audio.PlayEnemyExplodeSound();
+    }
+
+    IEnumerator SporeShootWait()
+    {
+        while(gameObject.activeInHierarchy)
+        {
+            GameObject spore = GameObject.Instantiate(_spore,transform.position,Quaternion.identity);
+            spore.GetComponent<Bullet>().SetEnemySpore(); 
+            yield return new WaitForSeconds(2.0f);
+        }
     }
 }

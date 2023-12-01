@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject _uiPauseMenu;
     [SerializeField] private bool _isGameOver = false;
+    [SerializeField] private bool _isGamePaused = false;
+
     [SerializeField] private Animator _mothershipAnim;
     public enum GameState{Menu,Intro,Gameplay,Interlude,Victory,Defeat}
     
@@ -54,8 +56,10 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
+            Cursor.lockState = CursorLockMode.None;
             _uiPauseMenu.SetActive(true);
-            Time.timeScale = 0.0f;
+            _isGamePaused = true;
+            PauseGame();
         }
         if(_isGameOver)
         {
@@ -80,6 +84,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void PauseGame()
+    {
+        Time.timeScale = 0;
+    }
+
     public void GameOver_Restart()
     {
         _isGameOver = true;
@@ -87,13 +96,16 @@ public class GameManager : MonoBehaviour
 
     public void Continue()
     {
-        _uiPauseMenu.SetActive(false);
+        Debug.Log("Clicked Continue!");
         Time.timeScale = 1.0f;
+        _uiPauseMenu.SetActive(false); 
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void Menu()
     {
-        SceneManager.LoadScene("menu");
+        SceneManager.LoadScene("mainMenu");
+        Time.timeScale = 1.0f;
     }
 
     public void QuitGame()
