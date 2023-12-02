@@ -19,6 +19,7 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private bool _hasSpeedBoostPowerup = false;
     [SerializeField] private bool _hasShield = false;
     [SerializeField] private UI_Manager _UImanager;
+    [SerializeField] private GameObject _playerSpriteObj;
     [SerializeField] private int _playerLives;
     [SerializeField] private GameObject _playerDamage1;
     [SerializeField] private GameObject _playerDamage2;
@@ -27,12 +28,15 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private int _playerScore = 0;
     [SerializeField] private SpawnMgr _spawner;
     [SerializeField] private AudioManager _audioMgr;
+    [SerializeField] private GameManager _gameMgr;
     
 
     // Start is called before the first frame update
     
     void Start()
     {
+      ChangePlayer("intro");
+      _gameMgr.currentGameState = GameManager.GameState.Intro;
       Cursor.lockState = CursorLockMode.Locked;
       _shieldObject.SetActive(false);
 
@@ -53,89 +57,136 @@ public class PlayerCtrl : MonoBehaviour
       PlayerMovement();
 
       FireBullet();
-
-      
     }
 
     void PlayerMovement()
     {
-      float Xmove = Input.GetAxis("Horizontal");
-      float Ymove = Input.GetAxis("Vertical");
-      if(Xmove + Ymove != 0)
+      if(_gameMgr.currentGameState != GameManager.GameState.LevelUp)
       {
-        _playerAnimator.speed = 1.0f;
-      }
-      else
-      {
-        _playerAnimator.speed = 0.0f;
-      }
+        float Xmove = Input.GetAxis("Horizontal");
+        float Ymove = Input.GetAxis("Vertical");
+        if(Xmove + Ymove != 0)
+        {
+          _playerAnimator.speed = 1.0f;
+        }
+        else
+        {
+          _playerAnimator.speed = 0.0f;
+        }
 
-      Vector3 movePos = new Vector3(Xmove,Ymove,0);
-      transform.Translate(Time.deltaTime * _speed * movePos);
-      
-       //clamp player position within screen bounds
-      transform.position = new Vector3(Mathf.Clamp(this.transform.position.x, -9.7f, 9.7f), Mathf.Clamp(this.transform.position.y, -4.6f, 4.6f), this.transform.position.z);
+        Vector3 movePos = new Vector3(Xmove,Ymove,0);
+        transform.Translate(Time.deltaTime * _speed * movePos);
+
+        if(_gameMgr.currentGameState == GameManager.GameState.Mothership)
+        {
+          if(transform.position.y >= -0.33f)
+          {
+            Vector2 lockLocation = new Vector2(0,-0.33f);
+            transform.position = lockLocation;
+            //ChangePlayer("powerup");
+            _gameMgr.currentGameState = GameManager.GameState.LevelUp;
+          }
+        }
+
+        else
+        {
+        //clamp player position within screen bounds
+        transform.position = new Vector3(Mathf.Clamp(this.transform.position.x, -9.7f, 9.7f), Mathf.Clamp(this.transform.position.y, -4.6f, 4.6f), this.transform.position.z);
+        }
+      }
       
     }
     
 
     void FireBullet()
     {
-      if(Input.GetMouseButtonDown(0) && _canFireBullet)
+      if(_gameMgr.currentGameState == GameManager.GameState.Gameplay)
       {
-
-        float Yoffset = transform.position.y;
-        float Xoffset = transform.position.x;
-
-        GameObject projectile = _bulletObject;
-        
-        if(!_has3shotPowerup)
+        if(Input.GetMouseButtonDown(0) && _canFireBullet)
         {
-          _shotsFired ++;
-          _shotsFired %= 2;
-          if(_shotsFired == 0)
+
+          float Yoffset = transform.position.y;
+          float Xoffset = transform.position.x;
+
+          GameObject projectile = _bulletObject;
+          
+          if(!_has3shotPowerup)
           {
-            Xoffset = transform.position.x + 1.2f;
-            Yoffset = transform.position.y + 1f;
-            _R_armAnimator.Play("FireRight",-1,0.0f);
-            _audioMgr.PlayGunSound();
-          }
-          else if(_shotsFired == 1)
-          {
-            if(!_oneLifeLeft)
-            {
-              Xoffset = transform.position.x + -0.9f;
-              Yoffset = transform.position.y + 1.33f;
-              _L_armAnimator.Play("FireLeft",-1,0.0f);
-              _audioMgr.PlayGunSound();
-            }
-            else
+            _shotsFired ++;
+            _shotsFired %= 2;
+            if(_shotsFired == 0)
             {
               Xoffset = transform.position.x + 1.2f;
               Yoffset = transform.position.y + 1f;
               _R_armAnimator.Play("FireRight",-1,0.0f);
               _audioMgr.PlayGunSound();
             }
+            else if(_shotsFired == 1)
+            {
+              if(!_oneLifeLeft)
+              {
+                Xoffset = transform.position.x + -0.9f;
+                Yoffset = transform.position.y + 1.33f;
+                _L_armAnimator.Play("FireLeft",-1,0.0f);
+                _audioMgr.PlayGunSound();
+              }
+              else
+              {
+                Xoffset = transform.position.x + 1.2f;
+                Yoffset = transform.position.y + 1f;
+                _R_armAnimator.Play("FireRight",-1,0.0f);
+                _audioMgr.PlayGunSound();
+              }
+            }
           }
-        }
-        else
-        {
-          Xoffset = transform.position.x + 1.2f;
-          Yoffset = transform.position.y + 1f;
-          
-          Vector3 offset2 = new Vector3(transform.position.x + -0.9f,transform.position.y + 1.33f,transform.position.z);
-          GameObject.Instantiate(projectile,offset2,Quaternion.identity);
-          _L_armAnimator.Play("FireLeft",-1,0.0f);
-          _R_armAnimator.Play("FireRight",-1,0.0f);
-          _audioMgr.PlayDoubleGunShots();
-        }
-          Vector3 offset = new Vector3(Xoffset,Yoffset,transform.position.z);
-          GameObject.Instantiate(projectile,offset,Quaternion.identity);
-          
+          else
+          {
+            Xoffset = transform.position.x + 1.2f;
+            Yoffset = transform.position.y + 1f;
+            
+            Vector3 offset2 = new Vector3(transform.position.x + -0.9f,transform.position.y + 1.33f,transform.position.z);
+            GameObject.Instantiate(projectile,offset2,Quaternion.identity);
+            _L_armAnimator.Play("FireLeft",-1,0.0f);
+            _R_armAnimator.Play("FireRight",-1,0.0f);
+            _audioMgr.PlayDoubleGunShots();
+          }
+            Vector3 offset = new Vector3(Xoffset,Yoffset,transform.position.z);
+            GameObject.Instantiate(projectile,offset,Quaternion.identity);
+            
 
-        _canFireBullet = false;
-        StartCoroutine(BulletCooldown());
+          _canFireBullet = false;
+          StartCoroutine(BulletCooldown());
+        }
       }
+    }
+
+    public void ChangePlayer(string state)
+    {
+        if(state == "intro")
+        {
+            //activate intro player
+            _playerSpriteObj = transform.Find("capsuleBody-start").gameObject;
+            _playerSpriteObj.SetActive(true);
+            //deactivate gameplay player
+            transform.Find("capsuleBodyMuscle").gameObject.SetActive(false);
+            //set animator to intro player   
+        }
+        else if (state == "powerup")
+        {
+            _playerSpriteObj.SetActive(false);
+        }
+        else if (state == "gameplay")
+        {
+            _playerSpriteObj = transform.Find("capsuleBodyMuscle").gameObject;
+            _playerSpriteObj.SetActive(true);
+            //deactivate gameplay player
+            transform.Find("capsuleBody-start").gameObject.SetActive(false);
+            //set animator to intro player
+          //activate gameplay player
+          //deactivate intro player
+          //set animator to gameplay player
+        }
+        _playerAnimator = _playerSpriteObj.GetComponent<Animator>();
     }
 
     public void CollectTripleShot()

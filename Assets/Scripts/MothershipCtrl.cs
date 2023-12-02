@@ -4,18 +4,34 @@ using UnityEngine;
 
 public class MothershipCtrl : MonoBehaviour
 {
-    private GameManager manager;
+    [SerializeField]private GameManager _manager;
+    [SerializeField]private Animator _mothershipAnim;
+    [SerializeField]private Animator _powerupAnim;
     
-    // Start is called before the first frame update
     void Start()
     {
+        _mothershipAnim = GetComponent<Animator>();
+        _manager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+    }
+
+    void Update()
+    {}
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            _mothershipAnim.SetBool("Entered",true);
+            _manager.currentGameState = GameManager.GameState.Mothership;
+        }
 
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerExit2D(Collider2D other)
     {
-        
+        if(other.CompareTag("Player"))
+        {
+            _mothershipAnim.SetBool("Entered",true);
+        }
     }
 
 

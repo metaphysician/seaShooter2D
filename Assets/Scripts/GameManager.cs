@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _uiPauseMenu;
     [SerializeField] private bool _isGameOver = false;
     [SerializeField] private bool _isGamePaused = false;
-
     [SerializeField] private Animator _mothershipAnim;
-    public enum GameState{Menu,Intro,Gameplay,Interlude,Victory,Defeat}
+
+    public enum GameState {Menu,Intro,Mothership,LevelUp,Gameplay,Interlude,Victory,Defeat}
     
     public GameState currentGameState;
 
@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour
             break;
             case GameState.Intro:
             //play intro cutscene
+            break;
+            case GameState.Mothership:
+            //play intro cutscene
+            break;
+            case GameState.LevelUp:
+            
             break;
             case GameState.Gameplay:
             //show UI
