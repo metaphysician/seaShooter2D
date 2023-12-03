@@ -38,11 +38,10 @@ public class PlayerCtrl : MonoBehaviour
       ChangePlayer("intro");
       _gameMgr.currentGameState = GameManager.GameState.Intro;
       Cursor.lockState = CursorLockMode.Locked;
+       _audioMgr = GameObject.Find("AudioMgr").GetComponent<AudioManager>();
       _shieldObject.SetActive(false);
-
-      _spawner = GameObject.Find("_SpawnManager").GetComponent<SpawnMgr>();
       _UImanager = GameObject.Find("UIManager").GetComponent<UI_Manager>();
-      _audioMgr = GameObject.Find("AudioMgr").GetComponent<AudioManager>();
+     
 
       if(_spawner == null)
         Debug.Log("No Spawn Mgr Found!");
@@ -81,6 +80,7 @@ public class PlayerCtrl : MonoBehaviour
         {
           if(transform.position.y >= -0.33f)
           {
+            _playerAnimator.CrossFadeInFixedTime("player_rest",1.0f);
             Vector2 lockLocation = new Vector2(0,-0.33f);
             transform.position = lockLocation;
             //ChangePlayer("powerup");

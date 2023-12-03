@@ -11,7 +11,13 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         gameMusicPlay = true;
-        StartCoroutine(RepeatMusicLoop());
+        //StartCoroutine(RepeatMusicLoop());
+    }
+
+    public void StartGameplayLoop()
+    {
+        gameMusicPlay = true;
+        StartCoroutine(RepeatMusicLoop()); 
     }
 
     void CueNextLoop()
