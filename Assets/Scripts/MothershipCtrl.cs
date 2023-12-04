@@ -36,7 +36,6 @@ public class MothershipCtrl : MonoBehaviour
             StartCoroutine(PoweringWait(2.2f));
             //trigger powerup SFX
         }
-
     }
 
     void OnTriggerExit2D(Collider2D other)

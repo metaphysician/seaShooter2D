@@ -10,11 +10,24 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip _playerDamage;
     [SerializeField] AudioClip _playerStepR;
     [SerializeField] AudioClip _playerStepL;
+    [SerializeField] AudioClip _playerShieldLoop;
+    [SerializeField] AudioClip _mothershipLoop;
+    [SerializeField] AudioClip _mothershipCutscene;
+    [SerializeField] AudioClip _pickup2shot;
+    [SerializeField] AudioClip _pickupShield;
+    [SerializeField] AudioClip _pickupSpeed;
+    [SerializeField] AudioClip _gameOver;
+
+
 
     [SerializeField] AudioSource _gunSource;
     [SerializeField] AudioSource _enemyExplosion;
     [SerializeField] AudioSource _playerSFX;
+    [SerializeField] AudioSource _playerShieldLoopSFX;
     [SerializeField] AudioSource _footSource;
+    [SerializeField] AudioSource _mothershipLoopSource;
+    [SerializeField] AudioSource _mothershipCutsceneSource;
+
 
     // Start is called before the first frame update
     void Start()
@@ -52,11 +65,14 @@ public class AudioManager : MonoBehaviour
             case "damage":
             clip = _playerDamage;
             break;
-            case "powerup1":
+            case "2shot":
+            clip = _pickup2shot;
             break;
             case "shield":
+            clip = _pickupShield;
             break;
             case "speedUp":
+            clip = _pickupSpeed;
             break;
         }
         _playerSFX.PlayOneShot(clip);
@@ -71,6 +87,36 @@ public class AudioManager : MonoBehaviour
         _footSource.PlayOneShot(_playerStepR);
     }
 
+    public void PlayPlayerShieldLoop()
+    {
+        _playerShieldLoopSFX.clip = _playerShieldLoop;
+        _playerShieldLoopSFX.Play();
+        _playerShieldLoopSFX.loop = true;
+    }
+
+    public void PlayGameOver()
+    {
+        _playerSFX.clip = _gameOver;
+        _playerSFX.Play();
+    }
+
+
+    public void PlayMothershipLoop()
+    {
+        if(!_mothershipLoopSource.isPlaying)
+        {
+            _mothershipLoopSource.clip = _mothershipLoop;
+            _mothershipLoopSource.Play();
+            _mothershipLoopSource.loop = true;
+        }
+    }
+
+    public void PlayMothershipCutscene()
+    {
+        _mothershipLoopSource.loop = false;
+        _mothershipLoopSource.clip = _mothershipCutscene;
+        _mothershipLoopSource.Play();
+    }
 
     IEnumerator TwoGunFireSound()
     {

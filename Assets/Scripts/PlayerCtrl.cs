@@ -83,7 +83,6 @@ public class PlayerCtrl : MonoBehaviour
             _playerAnimator.CrossFadeInFixedTime("player_rest",1.0f);
             Vector2 lockLocation = new Vector2(0,-0.33f);
             transform.position = lockLocation;
-            //ChangePlayer("powerup");
             _gameMgr.currentGameState = GameManager.GameState.LevelUp;
           }
         }
@@ -177,14 +176,11 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if (state == "gameplay")
         {
+            //activate gameplay player
             _playerSpriteObj = transform.Find("capsuleBodyMuscle").gameObject;
             _playerSpriteObj.SetActive(true);
-            //deactivate gameplay player
+            //deactivate intro player
             transform.Find("capsuleBody-start").gameObject.SetActive(false);
-            //set animator to intro player
-          //activate gameplay player
-          //deactivate intro player
-          //set animator to gameplay player
         }
         _playerAnimator = _playerSpriteObj.GetComponent<Animator>();
     }
@@ -238,6 +234,7 @@ public class PlayerCtrl : MonoBehaviour
       {
         _spawner.StopSpawning();
         _UImanager.GameOver();
+        _audioMgr.PlayGameOver();
         Destroy(gameObject);
       }
     }

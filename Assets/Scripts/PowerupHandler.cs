@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PowerupHandler : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 3.0f;
-    [SerializeField]
-    private int _powerupID;
+    [SerializeField] private float _speed = 3.0f;
+    [SerializeField] private int _powerupID;
+    [SerializeField] private AudioManager _audioMgr;
 
+    void Start()
+    {
+      _audioMgr = GameObject.Find("AudioMgr").GetComponent<AudioManager>();
+
+    }
     void Update()
     {
         if (transform.position.y > -6.6f)
@@ -32,12 +36,15 @@ public class PowerupHandler : MonoBehaviour
                 {
                    case 0:
                      player.CollectTripleShot();
+                     _audioMgr.PlayerSFX("2shot");
                    break;
                    case 1:
                      player.CollectSpeedBoost();
+                     _audioMgr.PlayerSFX("speedUp");
                    break;
                    case 2:
                      player.CollectShield();
+                     _audioMgr.PlayerSFX("shield");
                    break;
                 }
                 Destroy(gameObject);
