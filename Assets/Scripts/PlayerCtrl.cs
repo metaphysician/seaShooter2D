@@ -215,6 +215,7 @@ public class PlayerCtrl : MonoBehaviour
 
       if(_playerLives > 0)
       {
+        StartCoroutine(Vibrate());
 
         _playerLives --;
         _UImanager.UpdatePlayerLives(_playerLives);
@@ -265,5 +266,25 @@ public class PlayerCtrl : MonoBehaviour
       _speed = 10.0f;
     }
 
+    IEnumerator Vibrate()
+    {
 
-  }
+      float vibrationDistance; vibrationDistance = 0.1f;
+      float vibrationSpeed; vibrationSpeed = 100.0f;
+      float vibrationDuration; vibrationDuration = .6f;
+
+      Vector3 initialPosition = transform.position;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < vibrationDuration)
+        {
+            float offset = Mathf.Sin(Time.time * vibrationSpeed) * vibrationDistance;
+            transform.position = initialPosition + new Vector3(offset, 0f, 0f);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = initialPosition; // Reset to the initial position after the vibration
+    }   
+
+}
